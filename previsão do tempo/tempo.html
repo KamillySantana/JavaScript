@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Clima</title>
+</head>
+<body>
+    <form id="previsao">
+        <h1>Escolha uma cidade para ver a previsão do tempo</h1>
+        <div class="lugares">
+            <button type="submit" data-lat="-21.2892" data-lon="-50.3411">Birigui</button>
+            <button type="submit" data-lat="-21.2115" data-lon="-50.4261">Araçatuba</button>
+            <button type="submit" data-lat="-21.064" data-lon="-50.1425">Buritama</button>
+            <button type="submit" data-lat="-23.5489" data-lon="-46.6388">São Paulo</button>
+        </div>
+      </form>
+      
+      <div id="conteudo"></div>
+      
+      <script>
+        var form = document.querySelector("#previsao");
+      
+        form.addEventListener("submit", function(event) {
+          event.preventDefault();
+          
+          // Obtém as coordenadas da cidade clicada
+          var lat = event.submitter.dataset.lat;
+          var lon = event.submitter.dataset.lon;
+          
+          // Atualiza a URL da API com as coordenadas da cidade clicada
+          var url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=4afebf9d393081ab2dab09c0c0879c16&units=metric`;
+          
+          fetch(url)
+            .then(function(response) {
+              return response.json();
+            })
+
+            .then(function(data) {
+              console.log(data);
+              var conteudo = document.getElementById("conteudo");
+      
+              conteudo.innerHTML = "<p class='valores'> País: " + data.sys.country + " </p>";
+              conteudo.innerHTML += "<p class='valores'> Cidade: " + data.name + " </p>";
+              conteudo.innerHTML += "<p class='valores'> Temperatura: " + data.main.temp + " </p>";
+              conteudo.innerHTML += "<p class='valores'> Temperatura máxima: " + data.main.temp_max + " </p>";
+              conteudo.innerHTML += "<p class='valores'> Temperatura mínima: " + data.main.temp_min + " </p>";
+              conteudo.innerHTML += "<p class='valores'> Céu: " + data.weather[0].main + " </p>";
+              conteudo.innerHTML += "<img class='valores' src='https://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png' />" 
+            });
+        });
+      </script>   
+    
+</body>
+</html>
